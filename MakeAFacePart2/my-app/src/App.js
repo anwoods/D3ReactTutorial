@@ -1,7 +1,9 @@
 import React from 'react';
-import * as d3 from 'd3';
 import ReactDOM from 'react-dom';
 import './App.css';
+import { BackgroundCircle } from './BackgroundCircle';
+import { Eyes } from './Eyes.js';
+import { Mouth } from './Mouth';
 
 const width = 960;
 const height = 500;
@@ -16,11 +18,11 @@ const eyeRadius = 40;
 const mouthWidth = 20;
 const mouthRadius = 150;
 
-const mouthArc = d3.arc()
-  .innerRadius(mouthRadius)
-  .outerRadius(mouthRadius + mouthWidth)
-  .startAngle(Math.PI / 2)
-  .endAngle(Math.PI * 3/2);
+// const mouthArc = d3.arc()
+//   .innerRadius(mouthRadius)
+//   .outerRadius(mouthRadius + mouthWidth)
+//   .startAngle(Math.PI / 2)
+//   .endAngle(Math.PI * 3/2);
 
 // const BackgroundCircle = (props) => (
 //   <circle 
@@ -32,15 +34,15 @@ const mouthArc = d3.arc()
 //   </circle>
 // );
 
-const BackgroundCircle = ({ radius }) => (
-  <circle 
-    r={radius}
-    fill="yellow"
-    stroke="black"
-    stroke-width={strokeWidth}
-  >
-  </circle>
-);
+// const BackgroundCircle = ({ radius, strokeWidth }) => (
+//   <circle 
+//     r={radius}
+//     fill="yellow"
+//     stroke="black"
+//     stroke-width={strokeWidth}
+//   >
+//   </circle>
+// );
 
 const App = () => (
   <div className="App">
@@ -48,25 +50,22 @@ const App = () => (
       <svg width={width} height={height}>
         <g transform={`translate(${centerX}, ${centerY})`} >
           <BackgroundCircle radius = {centerY - strokeWidth / 2}
+            strokeWidth={strokeWidth}
           >
           </BackgroundCircle>
 
-          <circle 
-            cx={-eyeOffsetX}
-            cy={-eyeOffsetY}
-            r={eyeRadius}
+          <Eyes
+            eyeOffsetX={eyeOffsetX}
+            eyeOffsetY={eyeOffsetY}
+            eyeRadius={eyeRadius}
           >
-          </circle>
-          <circle 
-            cx={eyeOffsetX}
-            cy={-eyeOffsetY}
-            r={eyeRadius}
+          </Eyes>
+
+          <Mouth
+            mouthRadius={mouthRadius}
+            mouthWidth={mouthWidth}
           >
-          </circle>
-          <path 
-            d={mouthArc()}
-          >
-          </path>
+          </Mouth>
         </g>
         
         </svg>
