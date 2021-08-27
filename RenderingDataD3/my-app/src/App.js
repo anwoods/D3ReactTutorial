@@ -1,5 +1,7 @@
-import logo from './logo.svg';
 import './App.css';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import * as d3 from 'd3';
 
 function App() {
   return (
