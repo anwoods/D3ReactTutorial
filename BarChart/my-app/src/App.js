@@ -1,32 +1,20 @@
 import './App.css';
 import ReactDOM from 'react-dom';
-import React, { useState, useCallback, useEffect } from 'react';
+import React from 'react';
 import * as d3 from 'd3';
+import { useData } from './useData';
+import { AxisBottom } from './AxisBottom';
+import { AxisLeft } from './AxisLeft';
+import { Marks } from './Marks';
 
-const csvUrl =
-  'https://gist.githubusercontent.com/curran/0ac4077c7fc6390f5dd33bf5c06cb5ff/raw/605c54080c7a93a417a3cea93fd52e7550e76500/UN_Population_2019.csv';
 
 const width = 960;
 const height = 500;
 const margin = {top: 20, bottom: 20, right: 20, left: 200};
 
+
 function App() {
-
-
-  const [data, setData] = useState(null);
-  useEffect(() => {
-    // d3.csv(csvUrl).then(data => {
-    //   //console.log("data is ", data);
-    //   setData(data);
-    // });
-    const row = (d) => {
-      d.Population = +d['2020']
-      return d;
-    }
-    d3.csv(csvUrl, row).then(data => {
-      setData(data.slice(0, 10));
-    })
-  }, []);
+  const data= useData();
 
   if(!data){
     return <pre>
@@ -37,57 +25,23 @@ function App() {
   const innerHeight = height - margin.bottom - margin.top;
   const innerWidth = width - margin.left - margin.right;
 
+  const yValue = d => d.Country;
+  const xValue = d => d.Population;
 
   const yScale = d3.scaleBand()
-    .domain(data.map(d => d.Country))
+    .domain(data.map(yValue))
     .range([0, innerHeight]);
 
   const xScale = d3.scaleLinear()
-    .domain([0, d3.max(data, d => d.Population)])
+    .domain([0, d3.max(data, xValue)])
     .range([0, innerWidth]);
-
 
   return (
     <svg width={width} height={height}>
       <g transform={`translate(${margin.left}, ${margin.top})`} >
-        {
-          xScale.ticks().map(tickValue =>
-            <g key={tickValue} transform={`translate(${xScale(tickValue)}, 0)`}>
-              <line 
-                y2={innerHeight}
-                stroke= "black"
-              />
-              <text style={{textAnchor: "middle"}} dy=".71em" y={innerHeight + 3}>
-                {tickValue}
-              </text>
-            </g>
-          )
-        }
-        {
-          yScale.domain().map(tickValue =>
-              <text 
-                key={tickValue}
-                style={{textAnchor: "end"}} 
-                dy=".32em" 
-                x={-3} 
-                y={yScale(tickValue) + yScale.bandwidth()/ 2}
-              >
-                {tickValue}
-              </text>
-
-          )
-        }
-        {
-          data.map(d => 
-            <rect 
-              key={d.Country}
-              x={0}
-              y={yScale(d.Country)}
-              width= {xScale(d.Population)}
-              height={yScale.bandwidth()}
-            />
-          )
-        }
+        <AxisBottom xScale={xScale} innerHeight={innerHeight} />
+        <AxisLeft yScale={yScale}/>
+        <Marks data={data} xScale={xScale} yScale={yScale} xValue={xValue} yValue={yValue}/>
       </g>
     </svg>
   );
