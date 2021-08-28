@@ -13,7 +13,7 @@ export const useData= () => {
       //   setData(data);
       // });
       const row = (d) => {
-        d.Population = +d['2020']
+        d.Population = +d['2020'] * 1000
         return d;
       }
       d3.csv(csvUrl, row).then(data => {
