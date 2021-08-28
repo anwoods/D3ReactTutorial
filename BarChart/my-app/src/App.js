@@ -8,6 +8,7 @@ const csvUrl =
 
 const width = 960;
 const height = 500;
+const margin = {top: 20, bottom: 20, right: 20, left: 20};
 
 function App() {
 
@@ -33,27 +34,46 @@ function App() {
     </pre>
   }
 
+  const innerHeight = height - margin.bottom - margin.top;
+  const innerWidth = width - margin.left - margin.right;
+
+
   const yScale = d3.scaleBand()
     .domain(data.map(d => d.Country))
-    .range([0, height]);
+    .range([0, innerHeight]);
 
   const xScale = d3.scaleLinear()
     .domain([0, d3.max(data, d => d.Population)])
-    .range([0, width]);
+    .range([0, innerWidth]);
 
 
   return (
     <svg width={width} height={height}>
-      {
-        data.map(d => 
-          <rect 
-            x={0}
-            y={yScale(d.Country)}
-            width= {xScale(d.Population)}
-            height={yScale.bandwidth()}
-          />
-        )
-      }
+      <g transform={`translate(${margin.left}, ${margin.top})`} >
+        {
+          xScale.ticks().map(tickValue =>
+            <g  transform={`translate(${xScale(tickValue)}, 0)`}>
+              <line 
+                y2={innerHeight}
+                stroke= "black"
+              />
+              <text style={{textAnchor: "middle"}} dy=".71em" y={innerHeight + 3}>
+                {tickValue}
+              </text>
+            </g>
+          )
+        }
+        {
+          data.map(d => 
+            <rect 
+              x={0}
+              y={yScale(d.Country)}
+              width= {xScale(d.Population)}
+              height={yScale.bandwidth()}
+            />
+          )
+        }
+      </g>
     </svg>
   );
 }
