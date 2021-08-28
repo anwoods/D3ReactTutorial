@@ -8,7 +8,7 @@ const csvUrl =
 
 const width = 960;
 const height = 500;
-const margin = {top: 20, bottom: 20, right: 20, left: 20};
+const margin = {top: 20, bottom: 20, right: 20, left: 200};
 
 function App() {
 
@@ -52,7 +52,7 @@ function App() {
       <g transform={`translate(${margin.left}, ${margin.top})`} >
         {
           xScale.ticks().map(tickValue =>
-            <g  transform={`translate(${xScale(tickValue)}, 0)`}>
+            <g key={tickValue} transform={`translate(${xScale(tickValue)}, 0)`}>
               <line 
                 y2={innerHeight}
                 stroke= "black"
@@ -64,8 +64,23 @@ function App() {
           )
         }
         {
+          yScale.domain().map(tickValue =>
+              <text 
+                key={tickValue}
+                style={{textAnchor: "end"}} 
+                dy=".32em" 
+                x={-3} 
+                y={yScale(tickValue) + yScale.bandwidth()/ 2}
+              >
+                {tickValue}
+              </text>
+
+          )
+        }
+        {
           data.map(d => 
             <rect 
+              key={d.Country}
               x={0}
               y={yScale(d.Country)}
               width= {xScale(d.Population)}
