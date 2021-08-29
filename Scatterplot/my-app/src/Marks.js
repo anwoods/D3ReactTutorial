@@ -8,6 +8,5 @@ export const Marks = ({data, yScale, xScale, xValue, yValue, tooltipFormat, radi
       >
           <title>X: {tooltipFormat(xValue(d))}, Y: {tooltipFormat(yValue(d))}</title>
       </circle>
-
     )
 );
