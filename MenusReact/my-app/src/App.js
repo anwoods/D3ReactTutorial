@@ -1,23 +1,44 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
 import './App.css';
+import { Dropdown } from "./Dropdown";
+
+const options = [
+  {
+    value: "dog", label: "Dog"
+  },
+  {
+    value: "cat", label: "Cat"
+  },
+  {
+    value: "hamster", label: "Hamster"
+  },
+  {
+    value: "parrot", label: "Parrot"
+  },
+  {
+    value: "spider", label: "Spider"
+  },
+  {
+    value: "goldfsh", label: "Goldfish"
+  }
+];
+
+const id = "pet-select";
+const initialValue = "hamster";
+
 
 function App() {
+  const [selectedValue, setSelectedValue] = useState(initialValue);
+  console.log("selectedValue", selectedValue)
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <label for={id}>Choose a pet:</label>
+      <Dropdown options={options} 
+        id={id} 
+        selectedValue={selectedValue}
+        onSelectedValueChange={setSelectedValue}
+      />
     </div>
   );
 }

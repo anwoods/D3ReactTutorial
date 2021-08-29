@@ -36,3 +36,10 @@
     transform: rotate(360deg);
   }
 }
+
+label, select {
+  font-size: 4em;
+}
+select option {
+  font-size: 1rem;
+}
