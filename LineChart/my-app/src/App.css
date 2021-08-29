@@ -45,8 +45,14 @@
   fill: #635F5D;
 }
 
-.mark {
-  fill: #137B80 
+.marks circle {
+  fill: #137B80; 
+}
+.marks path {
+  stroke: #137B80 ;
+  stroke-width: 5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
 }
 
 .axis-label{

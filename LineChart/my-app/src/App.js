@@ -25,11 +25,9 @@ function App() {
     </pre>
   }
 
-  console.log("data ", data)
-
   const innerHeight = height - margin.bottom - margin.top;
   const innerWidth = width - margin.left - margin.right;
-  const radiusSize= 10;
+  const radiusSize= 4;
 
   const yValue = d => d.temperature;
   const yAxisLabel = "Temperature";
@@ -41,6 +39,7 @@ function App() {
   const yScale = d3.scaleLinear()
     .domain(d3.extent(data, yValue))
     .range([innerHeight, 0])
+    .nice();
 
     //d3.extent(data, xValue)
   const xScale = d3.scaleTime()
@@ -61,7 +60,7 @@ function App() {
           xScale={xScale} 
           innerHeight={innerHeight} 
           tickFormat={xAxisTickFormat} 
-          tickOffset={5}
+          tickOffset={7}
         />
         <text 
           className="axis-label" 
@@ -70,7 +69,7 @@ function App() {
         >
           {yAxisLabel}
         </text>
-        <AxisLeft yScale={yScale} innerWidth={innerWidth} tickOffset={-5}/>
+        <AxisLeft yScale={yScale} innerWidth={innerWidth} tickOffset={-7}/>
         <text 
           className="axis-label" 
           x={innerWidth/2} 
