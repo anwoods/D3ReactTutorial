@@ -1,4 +1,4 @@
-import './App.css';
+
 import ReactDOM from 'react-dom';
 import React, { useState } from 'react';
 import * as d3 from 'd3';
@@ -7,7 +7,11 @@ import { AxisBottom } from './AxisBottom';
 import { AxisLeft } from './AxisLeft';
 import { Marks } from './Marks';
 import { Dropdown } from './Dropdown';
+import ReactDropdown from 'react-dropdown';
+import 'react-dropdown/style.css';
+import './App.css';
 
+console.log(ReactDropdown)
 
 const width = 960;
 const menuHeight = 50;
@@ -78,12 +82,12 @@ function App() {
 
   return (
     <>
-      <label for='x-select'>X:</label>
+      {/* <label for='x-select'>X:</label>
       <Dropdown 
        options={attributes} 
        id='x-select' 
        selectedValue={xAttribute}
-       onSelectedValueChange={setXAttribute}
+      onSelectedValueChange={setXAttribute}
       />
       <label for='y-select'>Y:</label>
       <Dropdown 
@@ -91,7 +95,21 @@ function App() {
        id='y-select' 
        selectedValue={yAttribute}
        onSelectedValueChange={setYAttribute}
-      />
+      /> */}
+      <div className="menus-container" >
+        <span className='dropdown-label'>X</span>
+        <ReactDropdown 
+        options={attributes}  
+        value={xAttribute}
+        onChange={({ value }) => setXAttribute(value) }
+        />
+        <span className='dropdown-label'>Y</span>
+        <ReactDropdown 
+        options={attributes} 
+        value={yAttribute}
+        onChange={option => setYAttribute(option.value) }
+        />
+      </div>
       <svg width={width} height={height}>
         <g transform={`translate(${margin.left}, ${margin.top})`} >
           <AxisBottom 
