@@ -13,7 +13,7 @@ export const useData= () => {
       //   setData(data);
       // });
       const row = (d) => {
-          console.log("row d ", d);
+          //console.log("row d ", d);
         d.sepal_length = +d.sepal_length;
         d.sepal_width = +d.sepal_width;
         d.petal_length = +d.petal_length;
