@@ -46,11 +46,16 @@ function App() {
   const initialYAttribute = 'sepal_width';
   const [yAttribute, setYAttribute] = useState(initialYAttribute);
 
+  const [hoveredValue, setHoveredValue] = useState(null);
+  console.log("New hovered value ", hoveredValue)
+
   if(!data){
     return <pre>
       Loading...
     </pre>
   }
+
+
 
   const innerHeight = height - margin.bottom - margin.top;
   const innerWidth = width - margin.left - margin.right;
@@ -65,7 +70,9 @@ function App() {
   const xAxisLabel = getLabel(xAttribute);
 
   const colorValue = d => d.species;
-  const colorLegendLabel ='Species'
+  const colorLegendLabel ='Species';
+
+  const filteredData = data.filter(d => hoveredValue === colorValue(d));
 
   const siFormat = d3.format(".2s");
   const xAxisTickFormat = n => siFormat(n).replace('G', 'B');
@@ -84,7 +91,8 @@ function App() {
     .domain(data.map(colorValue))
     .range(['#E6842A', '#137B80', '#8E6C8A'])
 
-  console.log("Colro value ", colorScale.domain())
+  const fadeOpacity = 0.2;
+
 
   return (
     <>
@@ -154,10 +162,13 @@ function App() {
               tickSpacing = {20}
               tickSize = {radiusSize}
               tickXOffset = {20}
+              onHover={setHoveredValue}
+              hoveredValue={hoveredValue}
+              fadeOpacity={fadeOpacity}
             />
           </g>
-
-          <Marks 
+          <g opacity={hoveredValue ? fadeOpacity : 1}>
+            <Marks 
               data={data} 
               xScale={xScale} 
               yScale={yScale} 
@@ -168,6 +179,22 @@ function App() {
               tooltipFormat={xAxisTickFormat}
               radiusSize={radiusSize}
             />
+          </g>
+          <g>
+            <Marks 
+              data={filteredData} 
+              xScale={xScale} 
+              yScale={yScale} 
+              xValue={xValue} 
+              yValue={yValue} 
+              colorScale={colorScale}
+              colorValue={colorValue}
+              tooltipFormat={xAxisTickFormat}
+              radiusSize={radiusSize}
+            />
+          </g>
+
+
         </g>
       </svg>
     </>
