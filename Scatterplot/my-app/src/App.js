@@ -10,13 +10,14 @@ import { Dropdown } from './Dropdown';
 import ReactDropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import './App.css';
+import { ColorLegend } from './ColorLegend';
 
 console.log(ReactDropdown)
 
 const width = 960;
 const menuHeight = 50;
 const height = 500 - menuHeight;
-const margin = {top: 20, bottom: 60, right: 30, left: 90};
+const margin = {top: 20, bottom: 60, right: 200, left: 90};
 const xAxisLabelOffset = 50;
 const yAxisLabelOffset= 40;
 
@@ -24,8 +25,7 @@ const attributes = [
   { value: 'sepal_length', label: 'Sepal Length' },
   { value: 'sepal_width', label: 'Sepal Width' },
   { value: 'petal_length', label: 'Petal Length' },
-  { value: 'petal_width', label: 'Petal Width' },
-  { value: 'species', label: 'Species' }
+  { value: 'petal_width', label: 'Petal Width' }
 ];
 
 const getLabel = (value) => {
@@ -64,6 +64,9 @@ function App() {
   const xValue = d => d[xAttribute];
   const xAxisLabel = getLabel(xAttribute);
 
+  const colorValue = d => d.species;
+  const colorLegendLabel ='Species'
+
   const siFormat = d3.format(".2s");
   const xAxisTickFormat = n => siFormat(n).replace('G', 'B');
 
@@ -71,14 +74,17 @@ function App() {
     .domain(d3.extent(data, yValue))
     .range([0, innerHeight])
 
-    //d3.extent(data, xValue)
+
   const xScale = d3.scaleLinear()
     .domain(d3.extent(data, xValue))
     .range([0, innerWidth])
     .nice();
 
+  const colorScale = d3.scaleOrdinal()
+    .domain(data.map(colorValue))
+    .range(['#E6842A', '#137B80', '#8E6C8A'])
 
-
+  console.log("Colro value ", colorScale.domain())
 
   return (
     <>
@@ -134,12 +140,31 @@ function App() {
           >
             {xAxisLabel}
           </text>
+          <g className="tick" transform={`translate(${innerWidth + 50}, 50)`}>
+            <text 
+              x={35}
+              y={-20}
+              className="axis-label" 
+              textAnchor="middle"
+            >
+              {colorLegendLabel}
+            </text>
+            <ColorLegend 
+              colorScale={colorScale}
+              tickSpacing = {20}
+              tickSize = {radiusSize}
+              tickXOffset = {20}
+            />
+          </g>
+
           <Marks 
               data={data} 
               xScale={xScale} 
               yScale={yScale} 
               xValue={xValue} 
               yValue={yValue} 
+              colorScale={colorScale}
+              colorValue={colorValue}
               tooltipFormat={xAxisTickFormat}
               radiusSize={radiusSize}
             />
